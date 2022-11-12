@@ -1,0 +1,28 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 10vh 80vh 10vh;
+    background-color: rgb(1, 47, 173);
+}
+header{
+    display: inline-flex;
+    justify-content: space-between;
+    background-color: aliceblue;
+}
+    header > div{
+        height: 8vh;
+        width: 10vw;
+        margin: 1vh;
+        background-color: rgb(178, 178, 178);
+        border-radius: 5px;
+        font-size: .4em;
+    }
+footer{
+    display: flexbox;
+    align-content: space-between;
+    background-color: rgb(0, 0, 0);
+}

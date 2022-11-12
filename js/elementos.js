@@ -9,7 +9,8 @@ const html = {
     btn_entrar:     document.getElementById("entrar"),
     btn_salir:      document.getElementById("salir"),
     btn_crear:      document.getElementById("crear"),
-    btn_google:     document.getElementById("google")
+    btn_google:     document.getElementById("google"),
+    btn_facebook:     document.getElementById("facebook")
 }
 
 export {html}
