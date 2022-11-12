@@ -2,25 +2,43 @@
     margin: 0;
     padding: 0;
 }
+:root{
+    --blanco: rgb(253, 253, 253);
+}
 body{
     height: 100vh;
     display: grid;
     grid-template-rows: 10vh 80vh 10vh;
-    background-color: rgb(1, 47, 173);
+    background-image:url(../img/fondo.jpg);
+    background-size: cover;
 }
+
+/* Cabecera------------------------------------------------ */
 header{
-    display: inline-flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     justify-content: space-between;
-    background-color: aliceblue;
-}
+    justify-items: center;
+    
+}   
     header > div{
+        display: grid;
+        justify-content: center;
+        align-content: center;
         height: 8vh;
-        width: 10vw;
         margin: 1vh;
-        background-color: rgb(178, 178, 178);
         border-radius: 5px;
-        font-size: .4em;
+        color: var(--blanco);
     }
+    header > div:first-child{
+        justify-self: start;
+    }
+    header > div:last-child{
+        justify-self: end;
+    }
+/* Main---------------------------------------------------- */
+
+/* Pie de pagina--------------------------------------------*/
 footer{
     display: flexbox;
     align-content: space-between;
