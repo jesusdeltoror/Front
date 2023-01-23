@@ -117,7 +117,7 @@ function inicializar() {
             html.div_id.innerHTML = user.email;
             // ...
         } else {
-            html.div_id.innerHTML = `<i class="fa-solid fa-circle-user fa-1x" style="color:Tomato"></i>`;
+            html.div_id.innerHTML = `<i class="fa-solid fa-circle-user fa-2x icono"></i>`;
             // User is signed out
             // ...
         }
