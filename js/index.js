@@ -1,5 +1,6 @@
 import { html } from "./elementos.js";
-import { app } from "./config.js";
+import { app, db } from "./config.js";
+//Imports para autenticarse
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -12,6 +13,14 @@ import {
     signInWithPopup,
     signOut
 } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
+//Imports v¡base de datos
+import {
+    collection,
+    addDoc,
+    setDoc,
+    doc,
+    getDoc,
+} from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
 
 window.onload = inicializar;
 
@@ -85,27 +94,25 @@ function inicializar() {
     //Autenticacion con Facebook
     html.btn_facebook.addEventListener("click", () => {
         signInWithPopup(auth, providerFacebook)
-        .then((result) => {
-          // The signed-in user info.
-          const user = result.user;
-      
-          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-          const credential = FacebookAuthProvider.credentialFromResult(result);
-          const accessToken = credential.accessToken;
-      
-          // ...
-        })
-        .catch((error) => {
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // The email of the user's account used.
-          const email = error.customData.email;
-          // The AuthCredential type that was used.
-          const credential = FacebookAuthProvider.credentialFromError(error);
-      
-          // ...
-        });
+            .then((result) => {
+                // The signed-in user info.
+                const user = result.user;
+                // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+                const credential = FacebookAuthProvider.credentialFromResult(result);
+                const accessToken = credential.accessToken;
+
+                // ...
+            })
+            .catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData.email;
+                // The AuthCredential type that was used.
+                const credential = FacebookAuthProvider.credentialFromError(error);
+                // ...
+            });
     });
 
     //Obcerver indica el estado de la autenticacion
@@ -115,14 +122,84 @@ function inicializar() {
             // https://firebase.google.com/docs/reference/js/firebase.User
             const uid = user.uid;
             html.div_id.innerHTML = user.email;
+            html.form_log.style.display = "none";
+            html.btn_salir.style.display = "block";
             // ...
         } else {
             html.div_id.innerHTML = `<i class="fa-solid fa-circle-user fa-2x icono"></i>`;
-            // User is signed out
-            // ...
+            html.form_log.style.display = "block";
+            html.btn_salir.style.display = "none";
         }
     });
 
+    //Guardar
+    //USANDO .then .catch
+    html.btn_guardar.addEventListener("click", async () => {
+        addDoc(collection(db, "users"), {
+            first: "Alan",
+            middle: "Mathison",
+            last: "Turing",
+            born: 1912
+        })
+            .then(() => console.log("Almacenamiento exitoso"))
+            .catch(err => console.log(err.message))
+    });
+    //Guardar
+    //USANDO Async
+    html.btn_guardar.addEventListener("click", async () => {
+        try {
+            const docRef = await addDoc(collection(db, "users"), {
+                first: "Ada",
+                last: "Lovelace",
+                born: 1815
+            });
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    })
+    //Guardar
+    //USANDO set
+    html.btn_guardar.addEventListener("click", async () => {
+        const citiesRef = collection(db, "cities");
+        await setDoc(doc(citiesRef, "SF"), {
+            name: "San Francisco", state: "CA", country: "USA",
+            capital: false, population: 860000,
+            regions: ["west_coast", "norcal"]
+        });
+        await setDoc(doc(citiesRef, "LA"), {
+            name: "Los Angeles", state: "CA", country: "USA",
+            capital: false, population: 3900000,
+            regions: ["west_coast", "socal"]
+        });
+        await setDoc(doc(citiesRef, "DC"), {
+            name: "Washington, D.C.", state: null, country: "USA",
+            capital: true, population: 680000,
+            regions: ["east_coast"]
+        });
+        await setDoc(doc(citiesRef, "TOK"), {
+            name: "Tokyo", state: null, country: "Japan",
+            capital: true, population: 9000000,
+            regions: ["kanto", "honshu"]
+        });
+        await setDoc(doc(citiesRef, "BJ"), {
+            name: "Beijing", state: null, country: "China",
+            capital: true, population: 21500000,
+            regions: ["jingjinji", "hebei"]
+        });
+    });
+    //BUSCAR
+    html.btn_buscar.addEventListener("click", async () => {
+        const docRef = doc(db, "cities", "SF");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    });
 
 }
 
